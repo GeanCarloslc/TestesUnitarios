@@ -1,4 +1,4 @@
-package io.github.geancarloslc.domain;
+package io.github.geancarloslc.api.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
