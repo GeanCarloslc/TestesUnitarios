@@ -7,6 +7,7 @@ import io.github.geancarloslc.api.services.exceptions.ObjectNotFoundExecption;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -19,5 +20,12 @@ public class UsuarioServiceImpl implements UsuarioService {
     public Usuario findById(Integer id) {
         Optional<Usuario> usuario = usuarioRepository.findById(id);
         return usuario.orElseThrow(() -> new ObjectNotFoundExecption("Cliente não encontrado."));
+    }
+
+    @Override
+    public List<Usuario> findAll() {
+
+        return usuarioRepository.findAll();
+
     }
 }
