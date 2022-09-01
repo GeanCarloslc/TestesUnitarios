@@ -9,7 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,6 +37,17 @@ public class UsuarioResource {
         return ResponseEntity.ok()
                 .body(usuarioService.findAll()
                         .stream().map(x -> modelMapper.map(x, UsuarioDTO.class)).collect(Collectors.toList()));
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<UsuarioDTO> create(@RequestBody UsuarioDTO usuarioDTO){
+        Usuario usuario = usuarioService.create(usuarioDTO);
+        URI uri = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(usuario.getId()).toUri();
+        return ResponseEntity.created(uri).build();
     }
 
 

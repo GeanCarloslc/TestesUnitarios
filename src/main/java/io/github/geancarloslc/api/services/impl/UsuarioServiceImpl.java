@@ -1,9 +1,11 @@
 package io.github.geancarloslc.api.services.impl;
 
 import io.github.geancarloslc.api.domain.Usuario;
+import io.github.geancarloslc.api.domain.dto.UsuarioDTO;
 import io.github.geancarloslc.api.repositories.UsuarioRepository;
 import io.github.geancarloslc.api.services.UsuarioService;
 import io.github.geancarloslc.api.services.exceptions.ObjectNotFoundExecption;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,9 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    @Autowired
+    private ModelMapper modelMapper;
+
     @Override
     public Usuario findById(Integer id) {
         Optional<Usuario> usuario = usuarioRepository.findById(id);
@@ -26,6 +31,10 @@ public class UsuarioServiceImpl implements UsuarioService {
     public List<Usuario> findAll() {
 
         return usuarioRepository.findAll();
+    }
 
+    @Override
+    public Usuario create(UsuarioDTO usuarioDTO) {
+        return usuarioRepository.save(modelMapper.map(usuarioDTO, Usuario.class));
     }
 }
