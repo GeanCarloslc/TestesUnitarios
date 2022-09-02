@@ -58,5 +58,13 @@ public class UsuarioResource {
                 .body(modelMapper.map(usuarioDTO, UsuarioDTO.class));
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<UsuarioDTO> delete(@PathVariable Integer id){
+        usuarioService.delete(id);
+        return ResponseEntity
+                .noContent()
+                .build();
+    }
+
 
 }

@@ -11,4 +11,5 @@ public interface UsuarioService {
     List<Usuario> findAll();
     Usuario create(UsuarioDTO usuarioDTO);
     Usuario update(UsuarioDTO usuarioDTO);
+    void delete(Integer id);
 }

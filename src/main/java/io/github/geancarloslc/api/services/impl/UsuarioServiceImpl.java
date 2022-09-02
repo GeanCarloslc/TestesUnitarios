@@ -26,7 +26,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Override
     public Usuario findById(Integer id) {
         Optional<Usuario> usuario = usuarioRepository.findById(id);
-        return usuario.orElseThrow(() -> new ObjectNotFoundExecption("Cliente não encontrado."));
+        return usuario.orElseThrow(() -> new ObjectNotFoundExecption("Usuario não encontrado."));
     }
 
     @Override
@@ -44,6 +44,12 @@ public class UsuarioServiceImpl implements UsuarioService {
     public Usuario update(UsuarioDTO usuarioDTO) {
         findByEmail(usuarioDTO);
         return usuarioRepository.save(modelMapper.map(usuarioDTO, Usuario.class));
+    }
+
+    @Override
+    public void delete(Integer id) {
+        findById(id);
+        usuarioRepository.deleteById(id);
     }
 
     private void findByEmail(UsuarioDTO usuarioDTO) {
