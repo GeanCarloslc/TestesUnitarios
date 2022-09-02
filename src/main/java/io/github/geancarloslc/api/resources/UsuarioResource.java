@@ -40,7 +40,6 @@ public class UsuarioResource {
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<UsuarioDTO> create(@RequestBody UsuarioDTO usuarioDTO){
         Usuario usuario = usuarioService.create(usuarioDTO);
         URI uri = ServletUriComponentsBuilder
@@ -48,6 +47,15 @@ public class UsuarioResource {
                 .path("/{id}")
                 .buildAndExpand(usuario.getId()).toUri();
         return ResponseEntity.created(uri).build();
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<UsuarioDTO> update(@PathVariable Integer id, @RequestBody UsuarioDTO usuarioDTO){
+        usuarioDTO.setId(id);
+        Usuario usuario = usuarioService.update(usuarioDTO);
+        return ResponseEntity
+                .ok()
+                .body(modelMapper.map(usuarioDTO, UsuarioDTO.class));
     }
 
 

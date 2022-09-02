@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -39,9 +40,15 @@ public class UsuarioServiceImpl implements UsuarioService {
         return usuarioRepository.save(modelMapper.map(usuarioDTO, Usuario.class));
     }
 
-    private void findByEmail(UsuarioDTO usuarioDTO){
+    @Override
+    public Usuario update(UsuarioDTO usuarioDTO) {
+        findByEmail(usuarioDTO);
+        return usuarioRepository.save(modelMapper.map(usuarioDTO, Usuario.class));
+    }
+
+    private void findByEmail(UsuarioDTO usuarioDTO) {
         Optional<Usuario> usuario = usuarioRepository.findByEmail(usuarioDTO.getEmail());
-        if (usuario.isPresent()){
+        if (usuario.isPresent() && !usuario.get().getId().equals(usuarioDTO.getId())) {
             throw new DataIntegratyViolationExecption("E-mail já cadastrado no sistema");
         }
     }

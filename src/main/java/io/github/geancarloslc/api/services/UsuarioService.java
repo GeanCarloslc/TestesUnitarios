@@ -10,4 +10,5 @@ public interface UsuarioService {
     Usuario findById(Integer id);
     List<Usuario> findAll();
     Usuario create(UsuarioDTO usuarioDTO);
+    Usuario update(UsuarioDTO usuarioDTO);
 }
