@@ -26,7 +26,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Override
     public Usuario findById(Integer id) {
         Optional<Usuario> usuario = usuarioRepository.findById(id);
-        return usuario.orElseThrow(() -> new ObjectNotFoundExecption("Usuario não encontrado."));
+        return usuario.orElseThrow(() -> new ObjectNotFoundExecption("Cliente não encontrado."));
     }
 
     @Override
