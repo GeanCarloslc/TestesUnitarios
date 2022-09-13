@@ -4,6 +4,8 @@ import io.github.geancarloslc.api.domain.Usuario;
 import io.github.geancarloslc.api.domain.dto.UsuarioDTO;
 import io.github.geancarloslc.api.repositories.UsuarioRepository;
 
+import io.github.geancarloslc.api.services.exceptions.ObjectNotFoundExecption;
+import javassist.tools.rmi.ObjectNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -57,6 +59,18 @@ class UsuarioServiceImplTest {
         assertEquals(ID, response.getId());
         assertEquals(NOME, response.getNome());
         assertEquals(EMAIL, response.getEmail());
+    }
+
+    @Test
+    void whenFindByIdThenReturnAnObjectNotFoundExeception(){
+        when(repository.findById(anyInt())).thenThrow(new ObjectNotFoundExecption("Cliente não encontrado."));
+
+        try {
+            service.findById(ID);
+        } catch (Exception ex){
+            assertEquals(ObjectNotFoundExecption.class, ex.getClass());
+            assertEquals("Cliente não encontrado.", ex.getMessage());
+        }
     }
 
     @Test
