@@ -4,6 +4,7 @@ import io.github.geancarloslc.api.domain.Usuario;
 import io.github.geancarloslc.api.domain.dto.UsuarioDTO;
 import io.github.geancarloslc.api.repositories.UsuarioRepository;
 
+import io.github.geancarloslc.api.services.exceptions.DataIntegratyViolationExecption;
 import io.github.geancarloslc.api.services.exceptions.ObjectNotFoundExecption;
 import javassist.tools.rmi.ObjectNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
@@ -100,6 +101,19 @@ class UsuarioServiceImplTest {
         assertEquals(ID, response.getId());
         assertEquals(NOME, response.getNome());
         assertEquals(EMAIL, response.getEmail());
+    }
+
+    @Test
+    void whenCreateThenReturnAnDataIntegreityViolationException() {
+        when(repository.findByEmail(anyString())).thenReturn(optionalUsuario);
+
+        try{
+            optionalUsuario.get().setId(2);
+            service.create(usuarioDTO);
+        } catch (Exception ex){
+            assertEquals(DataIntegratyViolationExecption.class, ex.getClass());
+            assertEquals("E-mail já cadastrado no sistema.", ex.getMessage());
+        }
     }
 
     @Test

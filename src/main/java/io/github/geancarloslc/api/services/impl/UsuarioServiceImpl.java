@@ -55,7 +55,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     private void findByEmail(UsuarioDTO usuarioDTO) {
         Optional<Usuario> usuario = usuarioRepository.findByEmail(usuarioDTO.getEmail());
         if (usuario.isPresent() && !usuario.get().getId().equals(usuarioDTO.getId())) {
-            throw new DataIntegratyViolationExecption("E-mail já cadastrado no sistema");
+            throw new DataIntegratyViolationExecption("E-mail já cadastrado no sistema.");
         }
     }
 }
