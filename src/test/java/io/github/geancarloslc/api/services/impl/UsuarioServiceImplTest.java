@@ -25,6 +25,7 @@ import static org.mockito.Mockito.*;
 @SpringBootTest
 class UsuarioServiceImplTest {
 
+
     @InjectMocks //Instancia real com dados do banco de dados
     private UsuarioServiceImpl service;
 
@@ -42,6 +43,7 @@ class UsuarioServiceImplTest {
     public static final String EMAIL = "gean@gmail.com";
     public static final String PASSWORD = "123";
     public static final String CLIENTE_NAO_ENCONTRADO = "Cliente não encontrado.";
+    public static final String E_MAIL_JA_CADASTRADO_NO_SISTEMA = "E-mail já cadastrado no sistema.";
     public static final int INDEX = 0;
 
     @BeforeEach
@@ -112,7 +114,7 @@ class UsuarioServiceImplTest {
             service.create(usuarioDTO);
         } catch (Exception ex){
             assertEquals(DataIntegratyViolationExecption.class, ex.getClass());
-            assertEquals("E-mail já cadastrado no sistema.", ex.getMessage());
+            assertEquals(E_MAIL_JA_CADASTRADO_NO_SISTEMA, ex.getMessage());
         }
     }
 
@@ -127,6 +129,19 @@ class UsuarioServiceImplTest {
         assertEquals(ID, response.getId());
         assertEquals(NOME, response.getNome());
         assertEquals(EMAIL, response.getEmail());
+    }
+
+    @Test
+    void whenUpdateThenReturnAnDataIntegreityViolationException() {
+        when(repository.findByEmail(anyString())).thenReturn(optionalUsuario);
+
+        try{
+            optionalUsuario.get().setId(2);
+            service.update(usuarioDTO);
+        } catch (Exception ex){
+            assertEquals(DataIntegratyViolationExecption.class, ex.getClass());
+            assertEquals(E_MAIL_JA_CADASTRADO_NO_SISTEMA, ex.getMessage());
+        }
     }
 
     @Test
