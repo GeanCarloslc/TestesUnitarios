@@ -15,6 +15,7 @@ import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -23,7 +24,6 @@ import static org.mockito.Mockito.when;
 
 @SpringBootTest
 class UsuarioServiceImplTest {
-
 
     @InjectMocks //Instancia real com dados do banco de dados
     private UsuarioServiceImpl service;
@@ -41,6 +41,8 @@ class UsuarioServiceImplTest {
     public static final String NOME = "Gean";
     public static final String EMAIL = "gean@gmail.com";
     public static final String PASSWORD = "123";
+    public static final String CLIENTE_NAO_ENCONTRADO = "Cliente não encontrado.";
+    public static final int INDEX = 0;
 
     @BeforeEach
     void setUp() {
@@ -63,18 +65,29 @@ class UsuarioServiceImplTest {
 
     @Test
     void whenFindByIdThenReturnAnObjectNotFoundExeception(){
-        when(repository.findById(anyInt())).thenThrow(new ObjectNotFoundExecption("Cliente não encontrado."));
+        when(repository.findById(anyInt())).thenThrow(new ObjectNotFoundExecption(CLIENTE_NAO_ENCONTRADO));
 
         try {
             service.findById(ID);
         } catch (Exception ex){
             assertEquals(ObjectNotFoundExecption.class, ex.getClass());
-            assertEquals("Cliente não encontrado.", ex.getMessage());
+            assertEquals(CLIENTE_NAO_ENCONTRADO, ex.getMessage());
         }
     }
 
     @Test
-    void findAll() {
+    void whenFindAllReturnAnListOfUsers() {
+        when(repository.findAll()).thenReturn(List.of(usuario));
+
+        List<Usuario> response = service.findAll();
+        assertNotNull(response);
+        assertEquals(1, response.size());
+        assertEquals(Usuario.class, response.get(INDEX).getClass());
+
+        assertEquals(ID, response.get(INDEX).getId());
+        assertEquals(NOME, response.get(INDEX).getNome());
+        assertEquals(EMAIL, response.get(INDEX).getEmail());
+        assertEquals(PASSWORD, response.get(INDEX).getPassword());
     }
 
     @Test
