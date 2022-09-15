@@ -2,7 +2,6 @@ package io.github.geancarloslc.api.resources;
 
 import io.github.geancarloslc.api.domain.Usuario;
 import io.github.geancarloslc.api.domain.dto.UsuarioDTO;
-import io.github.geancarloslc.api.repositories.UsuarioRepository;
 import io.github.geancarloslc.api.services.impl.UsuarioServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,10 +10,10 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.util.Optional;
+import org.springframework.http.ResponseEntity;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 class UsuarioResourceTest {
@@ -44,7 +43,20 @@ class UsuarioResourceTest {
     }
 
     @Test
-    void buscarCliente() {
+    void whenBuscarClienteThenReturnSuccess() {
+        when(service.findById(anyInt())).thenReturn(usuario);
+        when(modelMapper.map(any(), any())).thenReturn(usuarioDTO);
+
+        ResponseEntity<UsuarioDTO> response = resource.buscarCliente(ID);
+        assertNotNull(response);
+        assertNotNull(response.getBody());
+        assertEquals(ResponseEntity.class, response.getClass());
+        assertEquals(UsuarioDTO.class, response.getBody().getClass());
+
+        assertEquals(ID, response.getBody().getId());
+        assertEquals(NOME, response.getBody().getNome());
+        assertEquals(EMAIL, response.getBody().getEmail());
+        assertEquals(PASSWORD, response.getBody().getPassword());
     }
 
     @Test
