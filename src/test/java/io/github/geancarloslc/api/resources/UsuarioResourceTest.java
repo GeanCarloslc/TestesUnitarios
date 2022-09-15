@@ -112,7 +112,14 @@ class UsuarioResourceTest {
     }
 
     @Test
-    void delete() {
+    void whenDeleteThenReturnSuccess() {
+        doNothing().when(service).delete(anyInt());
+
+        ResponseEntity<UsuarioDTO> response = resource.delete(ID);
+        assertNotNull(response);
+        assertEquals(ResponseEntity.class, response.getClass());
+        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
+        verify(service, times(1)).delete(anyInt());
     }
 
     private void startUsuario() {
